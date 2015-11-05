@@ -1,13 +1,24 @@
 SpaceShip bob = new SpaceShip();
-//your variable declarations here
+Star sky[] = new Star[300];
+
 public void setup() 
 {
   background(0);
   size(400, 400);
+  for (int i=0; i<sky.length; i++) {
+    sky[i] = new Star();
+  }
 }
 public void draw() 
 {
+  background(0);
+  for (int i= 0; i <sky.length; i++)
+  {
+    sky[i].show();
+  }
+  bob.move();
   bob.show();
+  bob.keyPressed();
 }
 class SpaceShip extends Floater  
 {   
@@ -21,15 +32,16 @@ class SpaceShip extends Floater
   public double getDirectionY(){return myDirectionY;}   
   public void setPointDirection(int degrees){myPointDirection = degrees;}   
   public double getPointDirection(){return myPointDirection;} 
+  private int hX, hY;
 
 
   public SpaceShip()
   {
     corners = 6;
+    myCenterX = 0;
+    myCenterY = 0;
     int[] aX = {-6,   13,  -6,   0,  -12,   0};
     int[] aY = {-8,    0,   8,   3,    0,  -3};
-    //int[] aX = {-3,   10,  -3,   0,  -9,   0};
-    //int[] aY = {-8,    0,   8,   3,   0,  -3};
     xCorners = aX;
     yCorners = aY;
     myColor = 230;
@@ -38,14 +50,44 @@ class SpaceShip extends Floater
     setDirectionX(3); 
     setDirectionY(-3);
     setPointDirection(0);
+    hX = ((int)(Math.random()*400));
+    hY = ((int)(Math.random()*400));
   }
-
 
   public void keyPressed()
   {
-
+    if (keyCode == DOWN) {
+      bob.setX(hX);
+      bob.setY(hY);
+    }
+    if (keyCode == UP) {
+      bob.accelerate(0.03);
+    }
+    if (keyCode == RIGHT) {
+      bob.rotate(2);
+    }
+    if (keyCode == LEFT) {
+      bob.rotate(-2);
+    }
   }
 }
+
+class Star
+{
+  private int myX, myY, size;
+  public Star()
+  {
+    myX = (int)(Math.random()*400);
+    myY = (int)(Math.random()*400);
+    size = (int)(Math.random()*2);
+  }
+  public void show()
+  {
+    fill(255);
+    ellipse(myX, myY, size, size);
+  }
+}
+
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
   protected int corners;  //the number of corners, a triangular floater has 3   
@@ -122,4 +164,3 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
     endShape(CLOSE);  
   }   
 } 
-
