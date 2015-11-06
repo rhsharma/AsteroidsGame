@@ -9,6 +9,7 @@ public void setup()
     sky[i] = new Star();
   }
 }
+
 public void draw() 
 {
   background(0);
@@ -20,6 +21,7 @@ public void draw()
   bob.show();
   bob.keyPressed();
 }
+
 class SpaceShip extends Floater  
 {   
   public void setX(int x){myCenterX = x;}  
@@ -32,7 +34,7 @@ class SpaceShip extends Floater
   public double getDirectionY(){return myDirectionY;}   
   public void setPointDirection(int degrees){myPointDirection = degrees;}   
   public double getPointDirection(){return myPointDirection;} 
-  private int hX, hY;
+  private int hX, hY, point;
 
 
   public SpaceShip()
@@ -52,6 +54,7 @@ class SpaceShip extends Floater
     setPointDirection(0);
     hX = ((int)(Math.random()*400));
     hY = ((int)(Math.random()*400));
+    point = (int)(Math.random()*360);
   }
 
   public void keyPressed()
@@ -59,6 +62,12 @@ class SpaceShip extends Floater
     if (keyCode == DOWN) {
       bob.setX(hX);
       bob.setY(hY);
+      bob.setPointDirection(point);
+    }
+    else {
+      hX = ((int)(Math.random()*400));
+      hY = ((int)(Math.random()*400));
+      point = (int)(Math.random()*360);
     }
     if (keyCode == UP) {
       bob.accelerate(0.03);
