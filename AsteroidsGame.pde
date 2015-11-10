@@ -52,8 +52,8 @@ class SpaceShip extends Floater
     setDirectionX(3); 
     setDirectionY(-3);
     setPointDirection(0);
-    hX = ((int)(Math.random()*400));
-    hY = ((int)(Math.random()*400));
+    hX = ((int)(Math.random()*400));  //Hyperspace X
+    hY = ((int)(Math.random()*400));  //Hyperspace Y
     point = (int)(Math.random()*360);
   }
 
@@ -96,6 +96,46 @@ class Star
     ellipse(myX, myY, size, size);
   }
 }
+
+
+class Asteroids extends Floater
+{
+  public void setX(int x){myCenterX = x;}  
+  public int getX(){return (int)myCenterX;}   
+  public void setY(int y){myCenterY = y;}   
+  public int getY(){return (int)myCenterY;}   
+  public void setDirectionX(double x){myDirectionX = x;}   
+  public double getDirectionX(){return myDirectionX;}   
+  public void setDirectionY(double y){myDirectionY = y;}   
+  public double getDirectionY(){return myDirectionY;}   
+  public void setPointDirection(int degrees){myPointDirection = degrees;}   
+  public double getPointDirection(){return myPointDirection;}
+  private int rSpeed;
+
+  public Asteroids() 
+  {
+    corners = 6;
+    myCenterX = 0;
+    myCenterY = 0;
+    int[] aX = {-6,   13,  -6,   0,  -12,   0};
+    int[] aY = {-8,    0,   8,   3,    0,  -3};
+    xCorners = aX;
+    yCorners = aY;
+    myColor = 190;
+    setX(100);
+    setY(100);
+    setDirectionX(rSpeed); 
+    setDirectionY(rSpeed);
+    setPointDirection(0);
+    rSpeed = (int)(Math.random()*5-2);
+  }
+
+  public void move() {
+    myCenterX += myDirectionX;
+    myCenterY += myDirectionY;
+  }
+}
+
 
 abstract class Floater //Do NOT modify the Floater class! Make changes in the SpaceShip class 
 {   
