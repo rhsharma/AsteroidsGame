@@ -1,5 +1,6 @@
 SpaceShip bob = new SpaceShip();
 Star sky[] = new Star[300];
+Asteroids ast[] = new Asteroids[7];
 
 public void setup() 
 {
@@ -7,6 +8,9 @@ public void setup()
   size(400, 400);
   for (int i=0; i<sky.length; i++) {
     sky[i] = new Star();
+  }
+  for (int i = 0; i<ast.length; i++) {
+    ast[i] = new Asteroids();
   }
 }
 
@@ -17,10 +21,37 @@ public void draw()
   {
     sky[i].show();
   }
+  for (int i =0; i<ast.length; i++) {
+    ast[i].move();
+    ast[i].show();
+  }
   bob.move();
+  keyPressed();
   bob.show();
-  bob.keyPressed();
 }
+
+  public void keyPressed()
+  {
+    if (keyCode == DOWN) {
+      bob.setX(bob.hX);
+      bob.setY(bob.hY);
+      bob.setPointDirection(bob.point);
+    }
+    else {
+      bob.hX = ((int)(Math.random()*400));
+      bob.hY = ((int)(Math.random()*400));
+      bob.point = (int)(Math.random()*360);
+    }
+    if (keyCode == UP) {
+      bob.accelerate(0.02);
+    }
+    if (keyCode == RIGHT) {
+      bob.rotate(2);
+    }
+    if (keyCode == LEFT) {
+      bob.rotate(-2);
+    }
+  }
 
 class SpaceShip extends Floater  
 {   
@@ -34,7 +65,7 @@ class SpaceShip extends Floater
   public double getDirectionY(){return myDirectionY;}   
   public void setPointDirection(int degrees){myPointDirection = degrees;}   
   public double getPointDirection(){return myPointDirection;} 
-  private int hX, hY, point;
+  public int hX, hY, point;
 
 
   public SpaceShip()
@@ -57,28 +88,6 @@ class SpaceShip extends Floater
     point = (int)(Math.random()*360);
   }
 
-  public void keyPressed()
-  {
-    if (keyCode == DOWN) {
-      bob.setX(hX);
-      bob.setY(hY);
-      bob.setPointDirection(point);
-    }
-    else {
-      hX = ((int)(Math.random()*400));
-      hY = ((int)(Math.random()*400));
-      point = (int)(Math.random()*360);
-    }
-    if (keyCode == UP) {
-      bob.accelerate(0.03);
-    }
-    if (keyCode == RIGHT) {
-      bob.rotate(2);
-    }
-    if (keyCode == LEFT) {
-      bob.rotate(-2);
-    }
-  }
 }
 
 class Star
@@ -114,25 +123,28 @@ class Asteroids extends Floater
 
   public Asteroids() 
   {
-    corners = 6;
     myCenterX = 0;
     myCenterY = 0;
-    int[] aX = {-6,   13,  -6,   0,  -12,   0};
-    int[] aY = {-8,    0,   8,   3,    0,  -3};
+    int[] aX = {5,    7,    4,    2,   -4,   -7,   -4};
+    int[] aY = {4,    0,   -5,   -6,   -5,    0,    5};
+    corners = aX.length;
     xCorners = aX;
     yCorners = aY;
     myColor = 190;
-    setX(100);
-    setY(100);
-    setDirectionX(rSpeed); 
-    setDirectionY(rSpeed);
-    setPointDirection(0);
-    rSpeed = (int)(Math.random()*5-2);
+    setX((int)(Math.random()*400));
+    setY((int)(Math.random()*400));
+    setDirectionX((int)(Math.random()*5-2)); 
+    setDirectionY((int)(Math.random()*5-2));
+    setPointDirection(1);
+    rSpeed = (int)(Math.random()*5-2)*5;
   }
 
   public void move() {
-    myCenterX += myDirectionX;
-    myCenterY += myDirectionY;
+    if (rSpeed == 0) {
+      rSpeed = 2;
+    }
+      rotate(rSpeed);
+      super.move();
   }
 }
 
