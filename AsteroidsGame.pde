@@ -1,6 +1,7 @@
 SpaceShip bob = new SpaceShip();
 Star sky[] = new Star[300];
-Asteroids ast[] = new Asteroids[7];
+ArrayList <Asteroids> ast = new ArrayList <Asteroids>();
+//Asteroids ast[] = new Asteroids[10];
 
 public void setup() 
 {
@@ -9,8 +10,8 @@ public void setup()
   for (int i=0; i<sky.length; i++) {
     sky[i] = new Star();
   }
-  for (int i = 0; i<ast.length; i++) {
-    ast[i] = new Asteroids();
+  for (int i = 0; i<12; i++) {
+    ast.add(new Asteroids());
   }
 }
 
@@ -21,13 +22,19 @@ public void draw()
   {
     sky[i].show();
   }
-  for (int i =0; i<ast.length; i++) {
-    ast[i].move();
-    ast[i].show();
+  for (int i =0; i<ast.size(); i++) {
+    ast.get(i).move();
+    ast.get(i).show();
   }
   bob.move();
   keyPressed();
   bob.show();
+
+  for (int i = 0; i <ast.size(); i++) {
+    if (dist(bob.getX(), bob.getY(), ast.get(i).getX(), ast.get(i).getX()) < 15) {
+      ast.remove(i);
+    }
+  }
 }
 
   public void keyPressed()
@@ -43,7 +50,7 @@ public void draw()
       bob.point = (int)(Math.random()*360);
     }
     if (keyCode == UP) {
-      bob.accelerate(0.02);
+      bob.accelerate(0.01);
     }
     if (keyCode == RIGHT) {
       bob.rotate(2);
