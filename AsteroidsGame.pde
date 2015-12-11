@@ -1,6 +1,9 @@
 SpaceShip bob = new SpaceShip();
-Star sky[] = new Star[300];
+Star sky[] = new Star[310];
 ArrayList <Asteroids> ast = new ArrayList <Asteroids>();
+ArrayList <Bullet> bullet = new ArrayList <Bullet>();
+public boolean zPressed = false;
+//Bullet bul = new Bullet(bob);
 //Asteroids ast[] = new Asteroids[10];
 
 public void setup() 
@@ -19,46 +22,80 @@ public void draw()
 {
   background(0);
   for (int i= 0; i <sky.length; i++)
-  {
     sky[i].show();
-  }
+
+    for (int i = 0; i <bullet.size(); i++) {
+        bullet.get(i).move();
+        bullet.get(i).show();
+    }
+
+  bob.keyPressed();
   for (int i =0; i<ast.size(); i++) {
     ast.get(i).move();
     ast.get(i).show();
   }
   bob.move();
-  keyPressed();
   bob.show();
-
+  if (ast.size() < 10)
+    ast.add(new Asteroids());
   for (int i = 0; i <ast.size(); i++) {
-    if (dist(bob.getX(), bob.getY(), ast.get(i).getX(), ast.get(i).getX()) < 15) {
+    if (dist(bob.getX(), bob.getY(), ast.get(i).getX(), ast.get(i).getY()) < 25)
       ast.remove(i);
+  }
+  for (int j = 0; j < bullet.size(); j++) {
+    for (int i = 0; i <ast.size(); i++) {
+      if (dist(bullet.get(j).getX(), bullet.get(j).getY(), ast.get(i).getX(), ast.get(i).getY()) < 15)
+        ast.remove(i);
     }
   }
 }
-
   public void keyPressed()
   {
-    if (keyCode == DOWN) {
-      bob.setX(bob.hX);
-      bob.setY(bob.hY);
-      bob.setPointDirection(bob.point);
-    }
-    else {
-      bob.hX = ((int)(Math.random()*400));
-      bob.hY = ((int)(Math.random()*400));
-      bob.point = (int)(Math.random()*360);
-    }
-    if (keyCode == UP) {
-      bob.accelerate(0.01);
-    }
-    if (keyCode == RIGHT) {
-      bob.rotate(2);
-    }
-    if (keyCode == LEFT) {
-      bob.rotate(-2);
-    }
+    if (key == ' '){ bullet.add(new Bullet(bob));}
   }
+
+class Bullet extends Floater
+{
+
+  public void setX(int x){myCenterX = x;}  
+  public int getX(){return (int)myCenterX;}   
+  public void setY(int y){myCenterY = y;}   
+  public int getY(){return (int)myCenterY;}   
+  public void setDirectionX(double x){myDirectionX = x;}   
+  public double getDirectionX(){return myDirectionX;}   
+  public void setDirectionY(double y){myDirectionY = y;}   
+  public double getDirectionY(){return myDirectionY;}   
+  public void setPointDirection(int degrees){myPointDirection = degrees;}   
+  public double getPointDirection(){return myPointDirection;}
+  public double dRadians;
+
+  public Bullet(SpaceShip theShip) {
+    myCenterX = theShip.getX();
+    myCenterY = theShip.getY();
+    myPointDirection = theShip.getPointDirection();
+    dRadians = myPointDirection*(Math.PI/180);
+    myDirectionX = (5 * Math.cos(dRadians) + theShip.getDirectionX());
+    myDirectionY = (5 * Math.sin(dRadians) + theShip.getDirectionY());
+  }
+
+  public void show() {
+    stroke(0, 150, 255);
+    fill(0, 150, 255);
+    ellipse((int)myCenterX, (int)myCenterY, 5, 5);
+  }
+
+  public void move() {
+      myCenterX += myDirectionX;    
+      myCenterY += myDirectionY;
+    // bul.setX((int)bob.getX());
+    // bul.setY((int)bob.getY());
+    // bul.setX((int)myCenterX++);
+    // bul.setY((int)myCenterY++);
+  }
+
+}
+
+
 
 class SpaceShip extends Floater  
 {   
@@ -89,12 +126,33 @@ class SpaceShip extends Floater
     setY(200);
     setDirectionX(3); 
     setDirectionY(-3);
-    setPointDirection(0);
+    setPointDirection(180);
     hX = ((int)(Math.random()*400));  //Hyperspace X
     hY = ((int)(Math.random()*400));  //Hyperspace Y
     point = (int)(Math.random()*360);
   }
 
+  public void keyPressed()
+  {
+    if (keyCode == DOWN) {
+      bob.setX(bob.hX);
+      bob.setY(bob.hY);
+      bob.setPointDirection(bob.point);
+    } else {
+      bob.hX = ((int)(Math.random()*400));
+      bob.hY = ((int)(Math.random()*400));
+      bob.point = (int)(Math.random()*360);
+    }
+    if (keyCode == UP) {
+      bob.accelerate(0.02);
+    }
+    if (keyCode == RIGHT) {
+      bob.rotate(2);
+    }
+    if (keyCode == LEFT) {
+      bob.rotate(-2);
+    }
+  }
 }
 
 class Star
@@ -108,6 +166,7 @@ class Star
   }
   public void show()
   {
+    stroke(255);
     fill(255);
     ellipse(myX, myY, size, size);
   }
